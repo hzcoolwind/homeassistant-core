@@ -2,6 +2,13 @@ FROM mcr.microsoft.com/vscode/devcontainers/python:0-3.11
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+RUN \
+    echo "">/etc/sources.list \
+    && echo "deb http://mirrors.ustc.edu.cn/debian/ buster main">>/etc/sources.list \
+    && echo "deb http://mirrors.ustc.edu.cn/debian/debian-security buster/updates main">>/etc/sources.list \
+    && echo "deb http://mirrors.ustc.edu.cn/debian/debian buster-updates main">>/etc/sources.list
+
+
 # Uninstall pre-installed formatting and linting tools
 # They would conflict with our pinned versions
 RUN \
