@@ -3,10 +3,9 @@ FROM mcr.microsoft.com/vscode/devcontainers/python:0-3.11
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN \
-    echo "">/etc/sources.list \
-    && echo "deb http://mirrors.ustc.edu.cn/debian/ buster main">>/etc/sources.list \
-    && echo "deb http://mirrors.ustc.edu.cn/debian/debian-security buster/updates main">>/etc/sources.list \
-    && echo "deb http://mirrors.ustc.edu.cn/debian/debian buster-updates main">>/etc/sources.list
+    cp /etc/apt/sources.list /etc/apt/sources.list.bak \
+    && sed -i "s@http://deb.debian.org@http://mirrors.aliyun.com@g" /etc/apt/sources.list \
+    && rm -rf /var/lib/apt/lists/*
 
 
 # Uninstall pre-installed formatting and linting tools
