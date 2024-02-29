@@ -42,6 +42,8 @@ RUN \
 
 WORKDIR /usr/src
 
+RUN pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
+
 # Setup hass-release
 RUN git clone --depth 1 https://github.com/home-assistant/hass-release \
     && pip3 install -e hass-release/
