@@ -5,8 +5,8 @@
     }),
     'area_id': None,
     'capabilities': dict({
-      'max': 100,
-      'min': 0,
+      'max': 70,
+      'min': 30,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
     }),
@@ -42,8 +42,8 @@
     'attributes': ReadOnlyDict({
       'device_class': 'power_factor',
       'friendly_name': 'Device Name Away extract fan setpoint',
-      'max': 100,
-      'min': 0,
+      'max': 70,
+      'min': 30,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
       'unit_of_measurement': '%',
@@ -51,8 +51,9 @@
     'context': <ANY>,
     'entity_id': 'number.device_name_away_extract_fan_setpoint',
     'last_changed': <ANY>,
+    'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '30',
+    'state': '40',
   })
 # ---
 # name: test_numbers[number.device_name_away_supply_fan_setpoint-entry]
@@ -61,8 +62,8 @@
     }),
     'area_id': None,
     'capabilities': dict({
-      'max': 100,
-      'min': 0,
+      'max': 74,
+      'min': 30,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
     }),
@@ -98,8 +99,8 @@
     'attributes': ReadOnlyDict({
       'device_class': 'power_factor',
       'friendly_name': 'Device Name Away supply fan setpoint',
-      'max': 100,
-      'min': 0,
+      'max': 74,
+      'min': 30,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
       'unit_of_measurement': '%',
@@ -107,8 +108,9 @@
     'context': <ANY>,
     'entity_id': 'number.device_name_away_supply_fan_setpoint',
     'last_changed': <ANY>,
+    'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '40',
+    'state': '42',
   })
 # ---
 # name: test_numbers[number.device_name_cooker_hood_extract_fan_setpoint-entry]
@@ -118,7 +120,7 @@
     'area_id': None,
     'capabilities': dict({
       'max': 100,
-      'min': 0,
+      'min': 30,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
     }),
@@ -155,7 +157,7 @@
       'device_class': 'power_factor',
       'friendly_name': 'Device Name Cooker hood extract fan setpoint',
       'max': 100,
-      'min': 0,
+      'min': 30,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
       'unit_of_measurement': '%',
@@ -163,8 +165,9 @@
     'context': <ANY>,
     'entity_id': 'number.device_name_cooker_hood_extract_fan_setpoint',
     'last_changed': <ANY>,
+    'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '90',
+    'state': '50',
   })
 # ---
 # name: test_numbers[number.device_name_cooker_hood_supply_fan_setpoint-entry]
@@ -174,7 +177,7 @@
     'area_id': None,
     'capabilities': dict({
       'max': 100,
-      'min': 0,
+      'min': 30,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
     }),
@@ -211,7 +214,7 @@
       'device_class': 'power_factor',
       'friendly_name': 'Device Name Cooker hood supply fan setpoint',
       'max': 100,
-      'min': 0,
+      'min': 30,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
       'unit_of_measurement': '%',
@@ -219,8 +222,9 @@
     'context': <ANY>,
     'entity_id': 'number.device_name_cooker_hood_supply_fan_setpoint',
     'last_changed': <ANY>,
+    'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '100',
+    'state': '70',
   })
 # ---
 # name: test_numbers[number.device_name_fireplace_extract_fan_setpoint-entry]
@@ -230,7 +234,7 @@
     'area_id': None,
     'capabilities': dict({
       'max': 100,
-      'min': 0,
+      'min': 30,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
     }),
@@ -267,7 +271,7 @@
       'device_class': 'power_factor',
       'friendly_name': 'Device Name Fireplace extract fan setpoint',
       'max': 100,
-      'min': 0,
+      'min': 30,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
       'unit_of_measurement': '%',
@@ -275,8 +279,9 @@
     'context': <ANY>,
     'entity_id': 'number.device_name_fireplace_extract_fan_setpoint',
     'last_changed': <ANY>,
+    'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '10',
+    'state': '56',
   })
 # ---
 # name: test_numbers[number.device_name_fireplace_supply_fan_setpoint-entry]
@@ -286,7 +291,7 @@
     'area_id': None,
     'capabilities': dict({
       'max': 100,
-      'min': 0,
+      'min': 30,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
     }),
@@ -323,7 +328,7 @@
       'device_class': 'power_factor',
       'friendly_name': 'Device Name Fireplace supply fan setpoint',
       'max': 100,
-      'min': 0,
+      'min': 30,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
       'unit_of_measurement': '%',
@@ -331,8 +336,9 @@
     'context': <ANY>,
     'entity_id': 'number.device_name_fireplace_supply_fan_setpoint',
     'last_changed': <ANY>,
+    'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '20',
+    'state': '77',
   })
 # ---
 # name: test_numbers[number.device_name_high_extract_fan_setpoint-entry]
@@ -342,7 +348,7 @@
     'area_id': None,
     'capabilities': dict({
       'max': 100,
-      'min': 0,
+      'min': 70,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
     }),
@@ -379,7 +385,7 @@
       'device_class': 'power_factor',
       'friendly_name': 'Device Name High extract fan setpoint',
       'max': 100,
-      'min': 0,
+      'min': 70,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
       'unit_of_measurement': '%',
@@ -387,8 +393,9 @@
     'context': <ANY>,
     'entity_id': 'number.device_name_high_extract_fan_setpoint',
     'last_changed': <ANY>,
+    'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '70',
+    'state': '100',
   })
 # ---
 # name: test_numbers[number.device_name_high_supply_fan_setpoint-entry]
@@ -398,7 +405,7 @@
     'area_id': None,
     'capabilities': dict({
       'max': 100,
-      'min': 0,
+      'min': 74,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
     }),
@@ -435,7 +442,7 @@
       'device_class': 'power_factor',
       'friendly_name': 'Device Name High supply fan setpoint',
       'max': 100,
-      'min': 0,
+      'min': 74,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
       'unit_of_measurement': '%',
@@ -443,8 +450,9 @@
     'context': <ANY>,
     'entity_id': 'number.device_name_high_supply_fan_setpoint',
     'last_changed': <ANY>,
+    'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '80',
+    'state': '100',
   })
 # ---
 # name: test_numbers[number.device_name_home_extract_fan_setpoint-entry]
@@ -454,7 +462,7 @@
     'area_id': None,
     'capabilities': dict({
       'max': 100,
-      'min': 0,
+      'min': 40,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
     }),
@@ -491,7 +499,7 @@
       'device_class': 'power_factor',
       'friendly_name': 'Device Name Home extract fan setpoint',
       'max': 100,
-      'min': 0,
+      'min': 40,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
       'unit_of_measurement': '%',
@@ -499,8 +507,9 @@
     'context': <ANY>,
     'entity_id': 'number.device_name_home_extract_fan_setpoint',
     'last_changed': <ANY>,
+    'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '50',
+    'state': '70',
   })
 # ---
 # name: test_numbers[number.device_name_home_supply_fan_setpoint-entry]
@@ -510,7 +519,7 @@
     'area_id': None,
     'capabilities': dict({
       'max': 100,
-      'min': 0,
+      'min': 42,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
     }),
@@ -547,7 +556,7 @@
       'device_class': 'power_factor',
       'friendly_name': 'Device Name Home supply fan setpoint',
       'max': 100,
-      'min': 0,
+      'min': 42,
       'mode': <NumberMode.SLIDER: 'slider'>,
       'step': 1,
       'unit_of_measurement': '%',
@@ -555,567 +564,8 @@
     'context': <ANY>,
     'entity_id': 'number.device_name_home_supply_fan_setpoint',
     'last_changed': <ANY>,
+    'last_reported': <ANY>,
     'last_updated': <ANY>,
-    'state': '60',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor-entry]
-  EntityRegistryEntrySnapshot({
-    'aliases': set({
-    }),
-    'area_id': None,
-    'capabilities': dict({
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-    }),
-    'config_entry_id': <ANY>,
-    'device_class': None,
-    'device_id': <ANY>,
-    'disabled_by': None,
-    'domain': 'number',
-    'entity_category': None,
-    'entity_id': 'number.device_name_power_factor',
-    'has_entity_name': True,
-    'hidden_by': None,
-    'icon': None,
-    'id': <ANY>,
-    'labels': set({
-    }),
-    'name': None,
-    'options': dict({
-    }),
-    'original_device_class': <NumberDeviceClass.POWER_FACTOR: 'power_factor'>,
-    'original_icon': None,
-    'original_name': 'Power factor',
-    'platform': 'flexit_bacnet',
-    'previous_unique_id': None,
-    'supported_features': 0,
-    'translation_key': 'away_extract_fan_setpoint',
-    'unique_id': '0000-0001-away_extract_fan_setpoint',
-    'unit_of_measurement': '%',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor-state]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'power_factor',
-      'friendly_name': 'Device Name Power factor',
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-      'unit_of_measurement': '%',
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.device_name_power_factor',
-    'last_changed': <ANY>,
-    'last_updated': <ANY>,
-    'state': '30',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_10-entry]
-  EntityRegistryEntrySnapshot({
-    'aliases': set({
-    }),
-    'area_id': None,
-    'capabilities': dict({
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-    }),
-    'config_entry_id': <ANY>,
-    'device_class': None,
-    'device_id': <ANY>,
-    'disabled_by': None,
-    'domain': 'number',
-    'entity_category': None,
-    'entity_id': 'number.device_name_power_factor_10',
-    'has_entity_name': True,
-    'hidden_by': None,
-    'icon': None,
-    'id': <ANY>,
-    'labels': set({
-    }),
-    'name': None,
-    'options': dict({
-    }),
-    'original_device_class': <NumberDeviceClass.POWER_FACTOR: 'power_factor'>,
-    'original_icon': None,
-    'original_name': 'Power factor',
-    'platform': 'flexit_bacnet',
-    'previous_unique_id': None,
-    'supported_features': 0,
-    'translation_key': 'home_supply_fan_setpoint',
-    'unique_id': '0000-0001-home_supply_fan_setpoint',
-    'unit_of_measurement': '%',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_10-state]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'power_factor',
-      'friendly_name': 'Device Name Power factor',
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-      'unit_of_measurement': '%',
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.device_name_power_factor_10',
-    'last_changed': <ANY>,
-    'last_updated': <ANY>,
-    'state': '60',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_2-entry]
-  EntityRegistryEntrySnapshot({
-    'aliases': set({
-    }),
-    'area_id': None,
-    'capabilities': dict({
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-    }),
-    'config_entry_id': <ANY>,
-    'device_class': None,
-    'device_id': <ANY>,
-    'disabled_by': None,
-    'domain': 'number',
-    'entity_category': None,
-    'entity_id': 'number.device_name_power_factor_2',
-    'has_entity_name': True,
-    'hidden_by': None,
-    'icon': None,
-    'id': <ANY>,
-    'labels': set({
-    }),
-    'name': None,
-    'options': dict({
-    }),
-    'original_device_class': <NumberDeviceClass.POWER_FACTOR: 'power_factor'>,
-    'original_icon': None,
-    'original_name': 'Power factor',
-    'platform': 'flexit_bacnet',
-    'previous_unique_id': None,
-    'supported_features': 0,
-    'translation_key': 'away_supply_fan_setpoint',
-    'unique_id': '0000-0001-away_supply_fan_setpoint',
-    'unit_of_measurement': '%',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_2-state]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'power_factor',
-      'friendly_name': 'Device Name Power factor',
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-      'unit_of_measurement': '%',
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.device_name_power_factor_2',
-    'last_changed': <ANY>,
-    'last_updated': <ANY>,
-    'state': '40',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_3-entry]
-  EntityRegistryEntrySnapshot({
-    'aliases': set({
-    }),
-    'area_id': None,
-    'capabilities': dict({
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-    }),
-    'config_entry_id': <ANY>,
-    'device_class': None,
-    'device_id': <ANY>,
-    'disabled_by': None,
-    'domain': 'number',
-    'entity_category': None,
-    'entity_id': 'number.device_name_power_factor_3',
-    'has_entity_name': True,
-    'hidden_by': None,
-    'icon': None,
-    'id': <ANY>,
-    'labels': set({
-    }),
-    'name': None,
-    'options': dict({
-    }),
-    'original_device_class': <NumberDeviceClass.POWER_FACTOR: 'power_factor'>,
-    'original_icon': None,
-    'original_name': 'Power factor',
-    'platform': 'flexit_bacnet',
-    'previous_unique_id': None,
-    'supported_features': 0,
-    'translation_key': 'cooker_hood_extract_fan_setpoint',
-    'unique_id': '0000-0001-cooker_hood_extract_fan_setpoint',
-    'unit_of_measurement': '%',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_3-state]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'power_factor',
-      'friendly_name': 'Device Name Power factor',
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-      'unit_of_measurement': '%',
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.device_name_power_factor_3',
-    'last_changed': <ANY>,
-    'last_updated': <ANY>,
-    'state': '90',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_4-entry]
-  EntityRegistryEntrySnapshot({
-    'aliases': set({
-    }),
-    'area_id': None,
-    'capabilities': dict({
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-    }),
-    'config_entry_id': <ANY>,
-    'device_class': None,
-    'device_id': <ANY>,
-    'disabled_by': None,
-    'domain': 'number',
-    'entity_category': None,
-    'entity_id': 'number.device_name_power_factor_4',
-    'has_entity_name': True,
-    'hidden_by': None,
-    'icon': None,
-    'id': <ANY>,
-    'labels': set({
-    }),
-    'name': None,
-    'options': dict({
-    }),
-    'original_device_class': <NumberDeviceClass.POWER_FACTOR: 'power_factor'>,
-    'original_icon': None,
-    'original_name': 'Power factor',
-    'platform': 'flexit_bacnet',
-    'previous_unique_id': None,
-    'supported_features': 0,
-    'translation_key': 'cooker_hood_supply_fan_setpoint',
-    'unique_id': '0000-0001-cooker_hood_supply_fan_setpoint',
-    'unit_of_measurement': '%',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_4-state]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'power_factor',
-      'friendly_name': 'Device Name Power factor',
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-      'unit_of_measurement': '%',
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.device_name_power_factor_4',
-    'last_changed': <ANY>,
-    'last_updated': <ANY>,
-    'state': '100',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_5-entry]
-  EntityRegistryEntrySnapshot({
-    'aliases': set({
-    }),
-    'area_id': None,
-    'capabilities': dict({
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-    }),
-    'config_entry_id': <ANY>,
-    'device_class': None,
-    'device_id': <ANY>,
-    'disabled_by': None,
-    'domain': 'number',
-    'entity_category': None,
-    'entity_id': 'number.device_name_power_factor_5',
-    'has_entity_name': True,
-    'hidden_by': None,
-    'icon': None,
-    'id': <ANY>,
-    'labels': set({
-    }),
-    'name': None,
-    'options': dict({
-    }),
-    'original_device_class': <NumberDeviceClass.POWER_FACTOR: 'power_factor'>,
-    'original_icon': None,
-    'original_name': 'Power factor',
-    'platform': 'flexit_bacnet',
-    'previous_unique_id': None,
-    'supported_features': 0,
-    'translation_key': 'fireplace_extract_fan_setpoint',
-    'unique_id': '0000-0001-fireplace_extract_fan_setpoint',
-    'unit_of_measurement': '%',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_5-state]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'power_factor',
-      'friendly_name': 'Device Name Power factor',
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-      'unit_of_measurement': '%',
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.device_name_power_factor_5',
-    'last_changed': <ANY>,
-    'last_updated': <ANY>,
-    'state': '10',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_6-entry]
-  EntityRegistryEntrySnapshot({
-    'aliases': set({
-    }),
-    'area_id': None,
-    'capabilities': dict({
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-    }),
-    'config_entry_id': <ANY>,
-    'device_class': None,
-    'device_id': <ANY>,
-    'disabled_by': None,
-    'domain': 'number',
-    'entity_category': None,
-    'entity_id': 'number.device_name_power_factor_6',
-    'has_entity_name': True,
-    'hidden_by': None,
-    'icon': None,
-    'id': <ANY>,
-    'labels': set({
-    }),
-    'name': None,
-    'options': dict({
-    }),
-    'original_device_class': <NumberDeviceClass.POWER_FACTOR: 'power_factor'>,
-    'original_icon': None,
-    'original_name': 'Power factor',
-    'platform': 'flexit_bacnet',
-    'previous_unique_id': None,
-    'supported_features': 0,
-    'translation_key': 'fireplace_supply_fan_setpoint',
-    'unique_id': '0000-0001-fireplace_supply_fan_setpoint',
-    'unit_of_measurement': '%',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_6-state]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'power_factor',
-      'friendly_name': 'Device Name Power factor',
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-      'unit_of_measurement': '%',
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.device_name_power_factor_6',
-    'last_changed': <ANY>,
-    'last_updated': <ANY>,
-    'state': '20',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_7-entry]
-  EntityRegistryEntrySnapshot({
-    'aliases': set({
-    }),
-    'area_id': None,
-    'capabilities': dict({
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-    }),
-    'config_entry_id': <ANY>,
-    'device_class': None,
-    'device_id': <ANY>,
-    'disabled_by': None,
-    'domain': 'number',
-    'entity_category': None,
-    'entity_id': 'number.device_name_power_factor_7',
-    'has_entity_name': True,
-    'hidden_by': None,
-    'icon': None,
-    'id': <ANY>,
-    'labels': set({
-    }),
-    'name': None,
-    'options': dict({
-    }),
-    'original_device_class': <NumberDeviceClass.POWER_FACTOR: 'power_factor'>,
-    'original_icon': None,
-    'original_name': 'Power factor',
-    'platform': 'flexit_bacnet',
-    'previous_unique_id': None,
-    'supported_features': 0,
-    'translation_key': 'high_extract_fan_setpoint',
-    'unique_id': '0000-0001-high_extract_fan_setpoint',
-    'unit_of_measurement': '%',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_7-state]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'power_factor',
-      'friendly_name': 'Device Name Power factor',
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-      'unit_of_measurement': '%',
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.device_name_power_factor_7',
-    'last_changed': <ANY>,
-    'last_updated': <ANY>,
-    'state': '70',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_8-entry]
-  EntityRegistryEntrySnapshot({
-    'aliases': set({
-    }),
-    'area_id': None,
-    'capabilities': dict({
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-    }),
-    'config_entry_id': <ANY>,
-    'device_class': None,
-    'device_id': <ANY>,
-    'disabled_by': None,
-    'domain': 'number',
-    'entity_category': None,
-    'entity_id': 'number.device_name_power_factor_8',
-    'has_entity_name': True,
-    'hidden_by': None,
-    'icon': None,
-    'id': <ANY>,
-    'labels': set({
-    }),
-    'name': None,
-    'options': dict({
-    }),
-    'original_device_class': <NumberDeviceClass.POWER_FACTOR: 'power_factor'>,
-    'original_icon': None,
-    'original_name': 'Power factor',
-    'platform': 'flexit_bacnet',
-    'previous_unique_id': None,
-    'supported_features': 0,
-    'translation_key': 'high_supply_fan_setpoint',
-    'unique_id': '0000-0001-high_supply_fan_setpoint',
-    'unit_of_measurement': '%',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_8-state]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'power_factor',
-      'friendly_name': 'Device Name Power factor',
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-      'unit_of_measurement': '%',
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.device_name_power_factor_8',
-    'last_changed': <ANY>,
-    'last_updated': <ANY>,
-    'state': '80',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_9-entry]
-  EntityRegistryEntrySnapshot({
-    'aliases': set({
-    }),
-    'area_id': None,
-    'capabilities': dict({
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-    }),
-    'config_entry_id': <ANY>,
-    'device_class': None,
-    'device_id': <ANY>,
-    'disabled_by': None,
-    'domain': 'number',
-    'entity_category': None,
-    'entity_id': 'number.device_name_power_factor_9',
-    'has_entity_name': True,
-    'hidden_by': None,
-    'icon': None,
-    'id': <ANY>,
-    'labels': set({
-    }),
-    'name': None,
-    'options': dict({
-    }),
-    'original_device_class': <NumberDeviceClass.POWER_FACTOR: 'power_factor'>,
-    'original_icon': None,
-    'original_name': 'Power factor',
-    'platform': 'flexit_bacnet',
-    'previous_unique_id': None,
-    'supported_features': 0,
-    'translation_key': 'home_extract_fan_setpoint',
-    'unique_id': '0000-0001-home_extract_fan_setpoint',
-    'unit_of_measurement': '%',
-  })
-# ---
-# name: test_numbers[number.device_name_power_factor_9-state]
-  StateSnapshot({
-    'attributes': ReadOnlyDict({
-      'device_class': 'power_factor',
-      'friendly_name': 'Device Name Power factor',
-      'max': 100,
-      'min': 0,
-      'mode': <NumberMode.SLIDER: 'slider'>,
-      'step': 1,
-      'unit_of_measurement': '%',
-    }),
-    'context': <ANY>,
-    'entity_id': 'number.device_name_power_factor_9',
-    'last_changed': <ANY>,
-    'last_updated': <ANY>,
-    'state': '50',
+    'state': '74',
   })
 # ---

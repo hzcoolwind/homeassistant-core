@@ -1,4 +1,5 @@
 """Support for the NextDNS service."""
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -18,40 +19,33 @@ from homeassistant.components.sensor import (
     SensorEntityDescription,
     SensorStateClass,
 )
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import PERCENTAGE, EntityCategory
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import StateType
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from . import CoordinatorDataT, NextDnsUpdateCoordinator
+from . import NextDnsConfigEntry
 from .const import (
     ATTR_DNSSEC,
     ATTR_ENCRYPTION,
     ATTR_IP_VERSIONS,
     ATTR_PROTOCOLS,
     ATTR_STATUS,
-    DOMAIN,
 )
+from .coordinator import CoordinatorDataT, NextDnsUpdateCoordinator
 
 PARALLEL_UPDATES = 1
 
 
-@dataclass(frozen=True)
-class NextDnsSensorRequiredKeysMixin(Generic[CoordinatorDataT]):
-    """Class for NextDNS entity required keys."""
+@dataclass(frozen=True, kw_only=True)
+class NextDnsSensorEntityDescription(
+    SensorEntityDescription, Generic[CoordinatorDataT]
+):
+    """NextDNS sensor entity description."""
 
     coordinator_type: str
     value: Callable[[CoordinatorDataT], StateType]
-
-
-@dataclass(frozen=True)
-class NextDnsSensorEntityDescription(
-    SensorEntityDescription,
-    NextDnsSensorRequiredKeysMixin[CoordinatorDataT],
-):
-    """NextDNS sensor entity description."""
 
 
 SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
@@ -60,7 +54,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         coordinator_type=ATTR_STATUS,
         entity_category=EntityCategory.DIAGNOSTIC,
         translation_key="all_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.all_queries,
     ),
@@ -69,7 +62,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         coordinator_type=ATTR_STATUS,
         entity_category=EntityCategory.DIAGNOSTIC,
         translation_key="blocked_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.blocked_queries,
     ),
@@ -78,7 +70,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         coordinator_type=ATTR_STATUS,
         entity_category=EntityCategory.DIAGNOSTIC,
         translation_key="relayed_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.relayed_queries,
     ),
@@ -97,7 +88,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
         translation_key="doh_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.doh_queries,
     ),
@@ -107,7 +97,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
         translation_key="doh3_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.doh3_queries,
     ),
@@ -117,7 +106,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
         translation_key="dot_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.dot_queries,
     ),
@@ -127,7 +115,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
         translation_key="doq_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.doq_queries,
     ),
@@ -137,7 +124,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
         translation_key="tcp_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.tcp_queries,
     ),
@@ -147,7 +133,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
         translation_key="udp_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.udp_queries,
     ),
@@ -217,7 +202,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
         translation_key="encrypted_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.encrypted_queries,
     ),
@@ -227,7 +211,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
         translation_key="unencrypted_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.unencrypted_queries,
     ),
@@ -247,7 +230,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
         translation_key="ipv4_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.ipv4_queries,
     ),
@@ -257,7 +239,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
         translation_key="ipv6_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.ipv6_queries,
     ),
@@ -277,7 +258,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
         translation_key="validated_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.validated_queries,
     ),
@@ -287,7 +267,6 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
         entity_category=EntityCategory.DIAGNOSTIC,
         entity_registry_enabled_default=False,
         translation_key="not_validated_queries",
-        native_unit_of_measurement="queries",
         state_class=SensorStateClass.TOTAL,
         value=lambda data: data.not_validated_queries,
     ),
@@ -306,19 +285,16 @@ SENSORS: tuple[NextDnsSensorEntityDescription, ...] = (
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
+    entry: NextDnsConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
     """Add a NextDNS entities from a config_entry."""
-    sensors: list[NextDnsSensor] = []
-    coordinators = hass.data[DOMAIN][entry.entry_id]
-
-    for description in SENSORS:
-        sensors.append(
-            NextDnsSensor(coordinators[description.coordinator_type], description)
+    async_add_entities(
+        NextDnsSensor(
+            getattr(entry.runtime_data, description.coordinator_type), description
         )
-
-    async_add_entities(sensors)
+        for description in SENSORS
+    )
 
 
 class NextDnsSensor(

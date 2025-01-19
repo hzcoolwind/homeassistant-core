@@ -1,4 +1,5 @@
-"""Coordinator for imag integration."""
+"""Coordinator for imap integration."""
+
 from __future__ import annotations
 
 import asyncio
@@ -13,7 +14,6 @@ from typing import TYPE_CHECKING, Any
 
 from aioimaplib import AUTH, IMAP4_SSL, NONAUTH, SELECTED, AioImapException
 
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import (
     CONF_PASSWORD,
     CONF_PORT,
@@ -40,6 +40,7 @@ from homeassistant.util.ssl import (
 from .const import (
     CONF_CHARSET,
     CONF_CUSTOM_EVENT_DATA_TEMPLATE,
+    CONF_EVENT_MESSAGE_DATA,
     CONF_FOLDER,
     CONF_MAX_MESSAGE_SIZE,
     CONF_SEARCH,
@@ -47,8 +48,12 @@ from .const import (
     CONF_SSL_CIPHER_LIST,
     DEFAULT_MAX_MESSAGE_SIZE,
     DOMAIN,
+    MESSAGE_DATA_OPTIONS,
 )
 from .errors import InvalidAuth, InvalidFolder
+
+if TYPE_CHECKING:
+    from . import ImapConfigEntry
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -122,13 +127,13 @@ class ImapMessage:
             return str(part.get_payload())
 
     @property
-    def headers(self) -> dict[str, tuple[str,]]:
+    def headers(self) -> dict[str, tuple[str, ...]]:
         """Get the email headers."""
-        header_base: dict[str, tuple[str,]] = {}
+        header_base: dict[str, tuple[str, ...]] = {}
         for key, value in self.email_message.items():
-            header_instances: tuple[str,] = (str(value),)
+            header_instances: tuple[str, ...] = (str(value),)
             if header_base.setdefault(key, header_instances) != header_instances:
-                header_base[key] += header_instances  # type: ignore[assignment]
+                header_base[key] += header_instances
         return header_base
 
     @property
@@ -192,13 +197,13 @@ class ImapMessage:
             ):
                 message_untyped_text = str(part.get_payload())
 
-        if message_text is not None:
+        if message_text is not None and message_text.strip():
             return message_text
 
-        if message_html is not None:
+        if message_html:
             return message_html
 
-        if message_untyped_text is not None:
+        if message_untyped_text:
             return message_untyped_text
 
         return str(self.email_message.get_payload())
@@ -207,14 +212,14 @@ class ImapMessage:
 class ImapDataUpdateCoordinator(DataUpdateCoordinator[int | None]):
     """Base class for imap client."""
 
-    config_entry: ConfigEntry
+    config_entry: ImapConfigEntry
     custom_event_template: Template | None
 
     def __init__(
         self,
         hass: HomeAssistant,
         imap_client: IMAP4_SSL,
-        entry: ConfigEntry,
+        entry: ImapConfigEntry,
         update_interval: timedelta | None,
     ) -> None:
         """Initiate imap client."""
@@ -224,6 +229,12 @@ class ImapDataUpdateCoordinator(DataUpdateCoordinator[int | None]):
         self._last_message_id: str | None = None
         self.custom_event_template = None
         self._diagnostics_data: dict[str, Any] = {}
+        self._event_data_keys: list[str] = entry.data.get(
+            CONF_EVENT_MESSAGE_DATA, MESSAGE_DATA_OPTIONS
+        )
+        self._max_event_size: int = entry.data.get(
+            CONF_MAX_MESSAGE_SIZE, DEFAULT_MAX_MESSAGE_SIZE
+        )
         _custom_event_template = entry.data.get(CONF_CUSTOM_EVENT_DATA_TEMPLATE)
         if _custom_event_template is not None:
             self.custom_event_template = Template(_custom_event_template, hass=hass)
@@ -253,17 +264,18 @@ class ImapDataUpdateCoordinator(DataUpdateCoordinator[int | None]):
                 initial = False
             self._last_message_id = message_id
             data = {
+                "entry_id": self.config_entry.entry_id,
                 "server": self.config_entry.data[CONF_SERVER],
                 "username": self.config_entry.data[CONF_USERNAME],
                 "search": self.config_entry.data[CONF_SEARCH],
                 "folder": self.config_entry.data[CONF_FOLDER],
                 "initial": initial,
                 "date": message.date,
-                "text": message.text,
                 "sender": message.sender,
                 "subject": message.subject,
-                "headers": message.headers,
+                "uid": last_message_uid,
             }
+            data.update({key: getattr(message, key) for key in self._event_data_keys})
             if self.custom_event_template is not None:
                 try:
                     data["custom"] = self.custom_event_template.async_render(
@@ -286,11 +298,8 @@ class ImapDataUpdateCoordinator(DataUpdateCoordinator[int | None]):
                         last_message_uid,
                         err,
                     )
-            data["text"] = message.text[
-                : self.config_entry.data.get(
-                    CONF_MAX_MESSAGE_SIZE, DEFAULT_MAX_MESSAGE_SIZE
-                )
-            ]
+            if "text" in data:
+                data["text"] = message.text[: self._max_event_size]
             self._update_diagnostics(data)
             if (size := len(json_bytes(data))) > MAX_EVENT_DATA_BYTES:
                 _LOGGER.warning(
@@ -325,7 +334,17 @@ class ImapDataUpdateCoordinator(DataUpdateCoordinator[int | None]):
             raise UpdateFailed(
                 f"Invalid response for search '{self.config_entry.data[CONF_SEARCH]}': {result} / {lines[0]}"
             )
-        if not (count := len(message_ids := lines[0].split())):
+        # Check we do have returned items.
+        #
+        # In rare cases, when no UID's are returned,
+        # only the status line is returned, and not an empty line.
+        # See: https://github.com/home-assistant/core/issues/132042
+        #
+        # Strictly the RfC notes that 0 or more numbers should be returned
+        # delimited by a space.
+        #
+        # See: https://datatracker.ietf.org/doc/html/rfc3501#section-7.2.5
+        if len(lines) == 1 or not (count := len(message_ids := lines[0].split())):
             self._last_message_uid = None
             return 0
         last_message_uid = (
@@ -384,7 +403,7 @@ class ImapPollingDataUpdateCoordinator(ImapDataUpdateCoordinator):
     """Class for imap client."""
 
     def __init__(
-        self, hass: HomeAssistant, imap_client: IMAP4_SSL, entry: ConfigEntry
+        self, hass: HomeAssistant, imap_client: IMAP4_SSL, entry: ImapConfigEntry
     ) -> None:
         """Initiate imap client."""
         _LOGGER.debug(
@@ -396,8 +415,6 @@ class ImapPollingDataUpdateCoordinator(ImapDataUpdateCoordinator):
         """Update the number of unread emails."""
         try:
             messages = await self._async_fetch_number_of_messages()
-            self.auth_errors = 0
-            return messages
         except (
             AioImapException,
             UpdateFailed,
@@ -405,7 +422,7 @@ class ImapPollingDataUpdateCoordinator(ImapDataUpdateCoordinator):
         ) as ex:
             await self._cleanup()
             self.async_set_update_error(ex)
-            raise UpdateFailed() from ex
+            raise UpdateFailed from ex
         except InvalidFolder as ex:
             _LOGGER.warning("Selected mailbox folder is invalid")
             await self._cleanup()
@@ -422,24 +439,28 @@ class ImapPollingDataUpdateCoordinator(ImapDataUpdateCoordinator):
                 )
                 self.config_entry.async_start_reauth(self.hass)
             self.async_set_update_error(ex)
-            raise ConfigEntryAuthFailed() from ex
+            raise ConfigEntryAuthFailed from ex
+
+        self.auth_errors = 0
+        return messages
 
 
 class ImapPushDataUpdateCoordinator(ImapDataUpdateCoordinator):
     """Class for imap client."""
 
     def __init__(
-        self, hass: HomeAssistant, imap_client: IMAP4_SSL, entry: ConfigEntry
+        self, hass: HomeAssistant, imap_client: IMAP4_SSL, entry: ImapConfigEntry
     ) -> None:
         """Initiate imap client."""
         _LOGGER.debug("Connected to server %s using IMAP push", entry.data[CONF_SERVER])
         super().__init__(hass, imap_client, entry, None)
         self._push_wait_task: asyncio.Task[None] | None = None
+        self.number_of_messages: int | None = None
 
     async def _async_update_data(self) -> int | None:
         """Update the number of unread emails."""
         await self.async_start()
-        return None
+        return self.number_of_messages
 
     async def async_start(self) -> None:
         """Start coordinator."""
@@ -451,7 +472,7 @@ class ImapPushDataUpdateCoordinator(ImapDataUpdateCoordinator):
         """Wait for data push from server."""
         while True:
             try:
-                number_of_messages = await self._async_fetch_number_of_messages()
+                self.number_of_messages = await self._async_fetch_number_of_messages()
             except InvalidAuth as ex:
                 self.auth_errors += 1
                 await self._cleanup()
@@ -481,7 +502,7 @@ class ImapPushDataUpdateCoordinator(ImapDataUpdateCoordinator):
                 continue
             else:
                 self.auth_errors = 0
-                self.async_set_updated_data(number_of_messages)
+                self.async_set_updated_data(self.number_of_messages)
             try:
                 idle: asyncio.Future = await self.imap_client.idle_start()
                 await self.imap_client.wait_server_push()

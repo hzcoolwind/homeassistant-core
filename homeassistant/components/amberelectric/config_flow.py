@@ -1,14 +1,14 @@
 """Config flow for the Amber Electric integration."""
+
 from __future__ import annotations
 
 import amberelectric
-from amberelectric.api import amber_api
-from amberelectric.model.site import Site, SiteStatus
+from amberelectric.models.site import Site
+from amberelectric.models.site_status import SiteStatus
 import voluptuous as vol
 
-from homeassistant import config_entries
+from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_API_TOKEN
-from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers.selector import (
     SelectOptionDict,
     SelectSelector,
@@ -23,11 +23,15 @@ API_URL = "https://app.amber.com.au/developers"
 
 def generate_site_selector_name(site: Site) -> str:
     """Generate the name to show in the site drop down in the configuration flow."""
+    # For some reason the generated API key returns this as any, not a string. Thanks pydantic
+    nmi = str(site.nmi)
     if site.status == SiteStatus.CLOSED:
-        return site.nmi + " (Closed: " + site.closed_on.isoformat() + ")"  # type: ignore[no-any-return]
+        if site.closed_on is None:
+            return f"{nmi} (Closed)"
+        return f"{nmi} (Closed: {site.closed_on.isoformat()})"
     if site.status == SiteStatus.PENDING:
-        return site.nmi + " (Pending)"  # type: ignore[no-any-return]
-    return site.nmi  # type: ignore[no-any-return]
+        return f"{nmi} (Pending)"
+    return nmi
 
 
 def filter_sites(sites: list[Site]) -> list[Site]:
@@ -35,7 +39,7 @@ def filter_sites(sites: list[Site]) -> list[Site]:
     filtered: list[Site] = []
     filtered_nmi: set[str] = set()
 
-    for site in sorted(sites, key=lambda site: site.status.value):
+    for site in sorted(sites, key=lambda site: site.status):
         if site.status == SiteStatus.ACTIVE or site.nmi not in filtered_nmi:
             filtered.append(site)
             filtered_nmi.add(site.nmi)
@@ -43,7 +47,7 @@ def filter_sites(sites: list[Site]) -> list[Site]:
     return filtered
 
 
-class AmberElectricConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class AmberElectricConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow."""
 
     VERSION = 1
@@ -56,14 +60,11 @@ class AmberElectricConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     def _fetch_sites(self, token: str) -> list[Site] | None:
         configuration = amberelectric.Configuration(access_token=token)
-        api: amber_api.AmberApi = amber_api.AmberApi.create(configuration)
+        api_client = amberelectric.ApiClient(configuration)
+        api = amberelectric.AmberApi(api_client)
 
         try:
             sites: list[Site] = filter_sites(api.get_sites())
-            if len(sites) == 0:
-                self._errors[CONF_API_TOKEN] = "no_site"
-                return None
-            return sites
         except amberelectric.ApiException as api_exception:
             if api_exception.status == 403:
                 self._errors[CONF_API_TOKEN] = "invalid_api_token"
@@ -71,9 +72,14 @@ class AmberElectricConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 self._errors[CONF_API_TOKEN] = "unknown_error"
             return None
 
+        if len(sites) == 0:
+            self._errors[CONF_API_TOKEN] = "no_site"
+            return None
+        return sites
+
     async def async_step_user(
         self, user_input: dict[str, str] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Step when user initializes a integration."""
         self._errors = {}
         self._sites = None
@@ -107,7 +113,7 @@ class AmberElectricConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     async def async_step_site(
         self, user_input: dict[str, str] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Step to select site."""
         self._errors = {}
 

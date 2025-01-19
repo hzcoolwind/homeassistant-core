@@ -1,10 +1,11 @@
 """Class to manage devices."""
+
 from __future__ import annotations
 
 from collections.abc import Callable, Iterator
 from dataclasses import dataclass, field
 
-from voip_utils import CallInfo
+from voip_utils import CallInfo, VoipDatagramProtocol
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import Event, HomeAssistant, callback
@@ -21,6 +22,7 @@ class VoIPDevice:
     device_id: str
     is_active: bool = False
     update_listeners: list[Callable[[VoIPDevice], None]] = field(default_factory=list)
+    protocol: VoipDatagramProtocol | None = None
 
     @callback
     def set_is_active(self, active: bool) -> None:
@@ -55,6 +57,18 @@ class VoIPDevice:
 
         return False
 
+    def get_pipeline_entity_id(self, hass: HomeAssistant) -> str | None:
+        """Return entity id for pipeline select."""
+        ent_reg = er.async_get(hass)
+        return ent_reg.async_get_entity_id("select", DOMAIN, f"{self.voip_id}-pipeline")
+
+    def get_vad_sensitivity_entity_id(self, hass: HomeAssistant) -> str | None:
+        """Return entity id for VAD sensitivity."""
+        ent_reg = er.async_get(hass)
+        return ent_reg.async_get_entity_id(
+            "select", DOMAIN, f"{self.voip_id}-vad_sensitivity"
+        )
+
 
 class VoIPDevices:
     """Class to store devices."""
@@ -83,7 +97,7 @@ class VoIPDevices:
             )
 
         @callback
-        def async_device_removed(ev: Event) -> None:
+        def async_device_removed(ev: Event[dr.EventDeviceRegistryUpdatedData]) -> None:
             """Handle device removed."""
             removed_id = ev.data["device_id"]
             self.devices = {
@@ -96,7 +110,7 @@ class VoIPDevices:
             self.hass.bus.async_listen(
                 dr.EVENT_DEVICE_REGISTRY_UPDATED,
                 async_device_removed,
-                callback(lambda ev: ev.data.get("action") == "remove"),
+                callback(lambda event_data: event_data["action"] == "remove"),
             )
         )
 
@@ -122,16 +136,23 @@ class VoIPDevices:
             fw_version = None
 
         dev_reg = dr.async_get(self.hass)
-        voip_id = call_info.caller_ip
+        if call_info.caller_endpoint is None:
+            raise RuntimeError("Could not identify VOIP caller")
+        voip_id = call_info.caller_endpoint.uri
         voip_device = self.devices.get(voip_id)
 
-        if voip_device is not None:
-            device = dev_reg.async_get(voip_device.device_id)
-            if device and fw_version and device.sw_version != fw_version:
-                dev_reg.async_update_device(device.id, sw_version=fw_version)
+        if voip_device is None:
+            # If we couldn't find the device based on SIP URI, see if we can
+            # find an old device based on just the host/IP and migrate it
+            voip_device = self.devices.get(call_info.caller_endpoint.host)
+            if voip_device is not None:
+                voip_device.voip_id = voip_id
+                self.devices[voip_id] = voip_device
+                dev_reg.async_update_device(
+                    voip_device.device_id, new_identifiers={(DOMAIN, voip_id)}
+                )
 
-            return voip_device
-
+        # Update device with latest info
         device = dev_reg.async_get_or_create(
             config_entry_id=self.config_entry.entry_id,
             identifiers={(DOMAIN, voip_id)},
@@ -141,6 +162,10 @@ class VoIPDevices:
             sw_version=fw_version,
             configuration_url=f"http://{call_info.caller_ip}",
         )
+
+        if voip_device is not None:
+            return voip_device
+
         voip_device = self.devices[voip_id] = VoIPDevice(
             voip_id=voip_id,
             device_id=device.id,

@@ -1,4 +1,5 @@
 """Lutron fan platform."""
+
 from __future__ import annotations
 
 import logging
@@ -43,7 +44,11 @@ class LutronFan(LutronDevice, FanEntity):
     _attr_name = None
     _attr_should_poll = False
     _attr_speed_count = 3
-    _attr_supported_features = FanEntityFeature.SET_SPEED
+    _attr_supported_features = (
+        FanEntityFeature.SET_SPEED
+        | FanEntityFeature.TURN_OFF
+        | FanEntityFeature.TURN_ON
+    )
     _lutron_device: Output
     _prev_percentage: int | None = None
 
@@ -78,7 +83,7 @@ class LutronFan(LutronDevice, FanEntity):
 
     def _request_state(self) -> None:
         """Request the state from the device."""
-        self._lutron_device.level  # pylint: disable=pointless-statement
+        _ = self._lutron_device.level
 
     def _update_attrs(self) -> None:
         """Update the state attributes."""

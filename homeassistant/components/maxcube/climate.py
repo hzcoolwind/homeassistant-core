@@ -1,4 +1,5 @@
 """Support for MAX! Thermostats via MAX! Cube."""
+
 from __future__ import annotations
 
 import logging
@@ -53,13 +54,13 @@ def setup_platform(
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
     """Iterate through all MAX! Devices and add thermostats."""
-    devices = []
-    for handler in hass.data[DATA_KEY].values():
-        for device in handler.cube.devices:
-            if device.is_thermostat() or device.is_wallthermostat():
-                devices.append(MaxCubeClimate(handler, device))
 
-    add_entities(devices)
+    add_entities(
+        MaxCubeClimate(handler, device)
+        for handler in hass.data[DATA_KEY].values()
+        for device in handler.cube.devices
+        if device.is_thermostat() or device.is_wallthermostat()
+    )
 
 
 class MaxCubeClimate(ClimateEntity):
@@ -72,7 +73,6 @@ class MaxCubeClimate(ClimateEntity):
         | ClimateEntityFeature.TURN_OFF
         | ClimateEntityFeature.TURN_ON
     )
-    _enable_turn_on_off_backwards_compatibility = False
 
     def __init__(self, handler, device):
         """Initialize MAX! Cube ClimateEntity."""
@@ -171,8 +171,8 @@ class MaxCubeClimate(ClimateEntity):
         else:
             return None
 
-        # Assume heating when valve is open
-        if valve > 0:
+        # Assume heating when valve is open.
+        if valve:
             return HVACAction.HEATING
 
         return HVACAction.OFF if self.hvac_mode == HVACMode.OFF else HVACAction.IDLE

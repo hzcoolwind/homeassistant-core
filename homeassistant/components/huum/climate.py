@@ -1,4 +1,5 @@
 """Support for Huum wifi-enabled sauna."""
+
 from __future__ import annotations
 
 import logging
@@ -55,7 +56,6 @@ class HuumDevice(ClimateEntity):
 
     _target_temperature: int | None = None
     _status: HuumStatusResponse | None = None
-    _enable_turn_on_off_backwards_compatibility = False
 
     def __init__(self, huum_handler: Huum, unique_id: str) -> None:
         """Initialize the heater."""

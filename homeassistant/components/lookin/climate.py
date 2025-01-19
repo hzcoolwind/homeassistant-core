@@ -1,4 +1,5 @@
 """The lookin integration climate platform."""
+
 from __future__ import annotations
 
 import logging
@@ -106,7 +107,6 @@ class ConditionerEntity(LookinCoordinatorEntity, ClimateEntity):
     _attr_min_temp = MIN_TEMP
     _attr_max_temp = MAX_TEMP
     _attr_target_temperature_step = PRECISION_WHOLE
-    _enable_turn_on_off_backwards_compatibility = False
 
     def __init__(
         self,

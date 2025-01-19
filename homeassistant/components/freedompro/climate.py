@@ -1,4 +1,5 @@
 """Support for Freedompro climate."""
+
 from __future__ import annotations
 
 import json
@@ -72,7 +73,6 @@ class Device(CoordinatorEntity[FreedomproDataUpdateCoordinator], ClimateEntity):
     _attr_current_temperature = 0
     _attr_target_temperature = 0
     _attr_hvac_mode = HVACMode.OFF
-    _enable_turn_on_off_backwards_compatibility = False
 
     def __init__(
         self,
